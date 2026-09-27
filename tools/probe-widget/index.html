@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tr('Claude Monitor Probe')</title>
+  <link rel="icon" type="image/svg+xml" href="resources/icon.svg" />
+  <meta name="x-icue-property" content="serverPort" data-label="tr('Server port')" data-type="textfield" data-default="'41780'" />
+  <script id="x-icue-groups" type="application/json">
+  [ { "title": "tr('Companion server')", "properties": ["serverPort"] } ]
+  </script>
+  <style>
+    html, body { margin: 0; height: 100%; background: #101010; color: #fff; font: 22px Consolas, "Cascadia Mono", monospace; }
+    body { padding: 16px; box-sizing: border-box; overflow: hidden; }
+    h1 { font-size: 26px; margin: 0 0 12px; color: #d97757; }
+    div { white-space: pre-wrap; word-break: break-all; margin: 2px 0; }
+    .ok { color: #2fd37a; } .bad { color: #ff6b6b; } .dim { color: #999; }
+  </style>
+</head>
+<body>
+  <h1>Claude Monitor Probe: page loaded (static HTML)</h1>
+  <div id="l1" class="dim">1. script did not run yet</div>
+  <div id="l2"></div>
+  <div id="l3"></div>
+  <div id="l4"></div>
+  <div id="l5"></div>
+  <div id="l6"></div>
+  <script>
+    icueEvents = {
+      onDataUpdated: function () { line('l3', 'iCUE onDataUpdated fired', 'ok'); },
+      onICUEInitialized: function () { line('l3', 'iCUE onICUEInitialized fired', 'ok'); }
+    };
+    function line(id, text, cls) { var e = document.getElementById(id); e.textContent = text; e.className = cls || ''; }
+    line('l1', '1. script running · ' + new Date().toLocaleTimeString(), 'ok');
+    line('l2', '2. origin=' + location.origin + ' url: ' + location.href + '\n   UA=' + navigator.userAgent);
+    function port() {
+      try { if (typeof serverPort !== 'undefined' && serverPort) return String(serverPort).replace(/\D/g, ''); } catch (e) {}
+      if (window.serverPort) return String(window.serverPort).replace(/\D/g, '');
+      return '41780';
+    }
+    function probe() {
+      var p = port();
+      var url = 'http://127.0.0.1:' + p + '/healthz';
+      line('l4', '4. fetching ' + url + ' …');
+      var t0 = Date.now();
+      fetch(url, { cache: 'no-store' })
+        .then(function (r) { return r.text().then(function (t) { line('l4', '4. fetch OK http ' + r.status + ' in ' + (Date.now() - t0) + ' ms: ' + t.slice(0, 200), 'ok'); }); })
+        .catch(function (e) { line('l4', '4. fetch FAILED (' + (e && e.message) + ') after ' + (Date.now() - t0) + ' ms — try localhost next', 'bad');
+          fetch('http://localhost:' + p + '/healthz', { cache: 'no-store' })
+            .then(function (r) { return r.text().then(function (t) { line('l5', '5. localhost fetch OK http ' + r.status + ': ' + t.slice(0, 200), 'ok'); }); })
+            .catch(function (e2) { line('l5', '5. localhost fetch FAILED (' + (e2 && e2.message) + ')', 'bad'); });
+        });
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url + '?xhr=1');
+      xhr.onload = function () { line('l6', '6. XHR OK http ' + xhr.status, 'ok'); };
+      xhr.onerror = function () { line('l6', '6. XHR FAILED (network error / blocked)', 'bad'); };
+      try { xhr.send(); } catch (e) { line('l6', '6. XHR threw ' + e.message, 'bad'); }
+    }
+    line('l3', '3. iCUE_initialized=' + (typeof iCUE_initialized !== 'undefined' ? iCUE_initialized : 'undefined') + ' iCUE=' + (typeof iCUE) + ' tr=' + (typeof tr));
+    setTimeout(probe, 1500);
+    setInterval(function () { line('l3', '3. iCUE_initialized=' + (typeof iCUE_initialized !== 'undefined' ? iCUE_initialized : 'undefined') + ' iCUE=' + (typeof iCUE) + ' tr=' + (typeof tr) + ' · ' + new Date().toLocaleTimeString()); }, 5000);
+    setInterval(probe, 30000);
+    window.onerror = function (m, s, l) { line('l6', 'JS error: ' + m + ' @' + l, 'bad'); };
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' http://127.0.0.1:41780 http://127.0.0.1:* http://localhost:41780 http://localhost:*; img-src 'self' data: blob:; object-src 'none'; base-uri 'none'; form-action 'none';" />
+  <title>tr('Claude Code Monitor')</title>
+  <link rel="icon" type="image/svg+xml" href="resources/icon.svg" />
+  <meta name="x-icue-widget-preview" content="resources/preview.png" />
+
+  <!-- Companion server -->
+  <meta name="x-icue-property" content="serverPort" data-label="tr('Server port')" data-type="textfield" data-default="'41780'" />
+  <meta name="x-icue-property" content="serverToken" data-label="tr('Server access token')" data-type="textfield" data-default="'none'" />
+  <meta name="x-icue-property" content="refreshSeconds" data-label="tr('Refresh interval')" data-type="slider" data-default="10" data-min="5" data-max="60" data-step="5" data-unit-label="'s'" />
+
+  <!-- Usage -->
+  <meta name="x-icue-property" content="warnPercent" data-label="tr('Warning threshold')" data-type="slider" data-default="60" data-min="10" data-max="95" data-step="5" data-unit-label="'%'" />
+  <meta name="x-icue-property" content="criticalPercent" data-label="tr('Critical threshold')" data-type="slider" data-default="85" data-min="20" data-max="100" data-step="5" data-unit-label="'%'" />
+  <meta name="x-icue-property" content="showSparklines" data-label="tr('Sparklines')" data-type="switch" data-default="true" />
+  <meta name="x-icue-property" content="resetDisplay" data-label="tr('Reset display')" data-type="tab-buttons" data-default="'countdown'" data-values="[{'key':'countdown','value':tr('Countdown')},{'key':'absolute','value':tr('Absolute time')}]" />
+
+  <!-- Sessions -->
+  <meta name="x-icue-property" content="showWebSessions" data-label="tr('Show web sessions')" data-type="switch" data-default="true" />
+  <meta name="x-icue-property" content="showIdleSessions" data-label="tr('Show idle sessions')" data-type="switch" data-default="true" />
+  <meta name="x-icue-property" content="sessionSort" data-label="tr('Session sort')" data-type="tab-buttons" data-default="'activity'" data-values="[{'key':'activity','value':tr('Activity')},{'key':'started','value':tr('Started')},{'key':'name','value':tr('Name')}]" />
+
+  <!-- Display -->
+  <meta name="x-icue-property" content="clockFormat" data-label="tr('Clock format')" data-type="tab-buttons" data-default="'24'" data-values="[{'key':'24','value':'24 h'},{'key':'12','value':'12 h'}]" />
+  <meta name="x-icue-property" content="density" data-label="tr('Density')" data-type="tab-buttons" data-default="'comfortable'" data-values="[{'key':'comfortable','value':tr('Comfortable')},{'key':'compact','value':tr('Compact')}]" />
+
+  <!-- Widget Personalization (must be last group) -->
+  <meta name="x-icue-property" content="textColor" data-label="tr('Text Color')" data-type="color" data-default="'#FFFFFF'" />
+  <meta name="x-icue-property" content="accentColor" data-label="tr('Accent Color')" data-type="color" data-default="'#D97757'" />
+  <meta name="x-icue-property" content="backgroundColor" data-label="tr('Background Color')" data-type="color" data-default="'#000000'" />
+  <meta name="x-icue-property" content="transparency" data-label="tr('Background Transparency')" data-type="slider" data-default="100" data-min="0" data-max="100" data-step="1" data-unit-label="'%'" />
+
+  <script id="x-icue-groups" type="application/json">
+  [
+    { "title": "tr('Companion server')", "properties": ["serverPort", "serverToken", "refreshSeconds"], "info": "tr('Run the companion server on this PC (npm run serve, or npm run autostart:install). The widget only talks to 127.0.0.1.')" },
+    { "title": "tr('Usage')", "properties": ["warnPercent", "criticalPercent", "showSparklines", "resetDisplay"], "info": "tr('Bars turn amber at the warning threshold and red at the critical threshold. Tap a usage row to switch between countdown and absolute reset time.')" },
+    { "title": "tr('Sessions')", "properties": ["showWebSessions", "showIdleSessions", "sessionSort"], "info": "tr('Tap the Local sessions title to cycle the sort order.')" },
+    { "title": "tr('Display')", "properties": ["clockFormat", "density"] },
+    { "title": "tr('Widget Personalization')", "properties": ["textColor", "accentColor", "backgroundColor", "transparency"] }
+  ]
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="styles/widget.css" />
+</head>
+<body>
+  <main id="app" data-state="loading" data-tier="xl" data-density="comfortable" data-reset="countdown" data-cloud="on">
+    <div class="widget-background" aria-hidden="true"></div>
+
+    <header id="topbar" class="topbar" role="button" tabindex="0">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 2.5v19M2.5 12h19M5.3 5.3l13.4 13.4M18.7 5.3L5.3 18.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span id="brand-text" class="brand-text">Claude Code</span>
+      </div>
+      <div class="account">
+        <span id="account-email" class="account-email">&mdash;</span>
+        <span id="account-plan" class="chip chip-plan" hidden="hidden"></span>
+      </div>
+      <div class="topbar-chips">
+        <span id="local-chip" class="chip chip-local" hidden="hidden"></span>
+        <span id="cloud-chip" class="chip chip-cloud" hidden="hidden"></span>
+        <span id="sync-chip" class="chip chip-sync">&hellip;</span>
+      </div>
+    </header>
+
+    <div id="banner" class="banner" hidden="hidden" data-kind=""><span id="banner-text"></span></div>
+
+    <div class="columns">
+      <section id="col-usage" class="col col-usage">
+        <h2 id="usage-title" class="col-title" role="button" tabindex="0">
+          <span id="usage-title-text">Account &amp; Usage</span>
+          <span id="more-limits" class="chip" hidden="hidden"></span>
+        </h2>
+        <ol id="usage-list" class="usage-list"></ol>
+      </section>
+
+      <section id="col-local" class="col col-local">
+        <h2 id="local-title" class="col-title" role="button" tabindex="0">
+          <span id="local-title-text">Local sessions</span>
+          <span id="local-count" class="count"></span>
+          <span id="local-sort" class="sort-label"></span>
+        </h2>
+        <ol id="local-list" class="session-list"></ol>
+        <div id="local-empty" class="empty" hidden="hidden"></div>
+      </section>
+
+      <section id="col-cloud" class="col col-cloud">
+        <h2 id="cloud-title" class="col-title">
+          <span id="cloud-title-text">Web sessions</span>
+          <span id="cloud-count" class="count"></span>
+        </h2>
+        <ol id="cloud-list" class="session-list"></ol>
+        <div id="cloud-empty" class="empty" hidden="hidden"></div>
+      </section>
+    </div>
+
+    <div id="state-loading" class="state state-loading"><div class="spinner" aria-hidden="true"></div><span id="loading-text">Connecting to companion server</span></div>
+    <div id="state-offline" class="state state-offline">
+      <strong id="offline-title">Companion server not reachable</strong>
+      <span id="offline-detail"></span>
+      <code id="offline-hint">npm run serve</code>
+      <button id="retry" class="retry" type="button">Retry</button>
+    </div>
+  </main>
+
+  <script src="scripts/icue-bridge.js"></script>
+  <script src="scripts/format.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/sparkline.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/main.js"></script>
+  <script>
+    // icueEvents is registered in scripts/icue-bridge.js; this guard keeps the bridge visible to iCUE import validation.
+    if (typeof icueEvents === "undefined") { console.warn("icueEvents was not registered"); }
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Widget preview harness</title>
+<style>
+  body { margin: 0; padding: 16px; background: #1b1d22; color: #ddd; font: 14px system-ui, sans-serif; }
+  h2 { margin: 24px 0 8px; font-weight: 500; }
+  iframe { display: block; border: 1px solid #444; background: #000; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  p { color: #999; }
+</style>
+</head>
+<body>
+<p>Widget query overrides are forwarded from this page's URL, e.g. <code>?serverPort=41780&amp;density=compact&amp;nowait=1</code>. Start <code>npm run serve</code> or <code>npm run serve:mock</code> first.</p>
+<h2>XL-H 2536×696</h2><iframe data-src="../widget/index.html" width="2536" height="696"></iframe>
+<h2>L-H 1688×696</h2><iframe data-src="../widget/index.html" width="1688" height="696"></iframe>
+<div class="row">
+  <div><h2>M-H 840×696</h2><iframe data-src="../widget/index.html" width="840" height="696"></iframe></div>
+  <div><h2>S-H 840×344</h2><iframe data-src="../widget/index.html" width="840" height="344"></iframe></div>
+  <div><h2>S-V 696×416</h2><iframe data-src="../widget/index.html" width="696" height="416"></iframe></div>
+  <div><h2>M-V 696×840</h2><iframe data-src="../widget/index.html" width="696" height="840"></iframe></div>
+</div>
+<script>
+  const q = location.search || '';
+  document.querySelectorAll('iframe[data-src]').forEach((f) => { f.src = f.dataset.src + q; });
+</script>
+</body>
+</html>

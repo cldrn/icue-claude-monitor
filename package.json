@@ -1,0 +1,32 @@
+{
+  "name": "icue-claude-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CORSAIR iCUE widget for XENEON EDGE: Claude Code account usage (session / weekly / model limits) with reset countdowns, plus local and web session lists",
+  "author": "Paulino Calderon",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "serve": "node server/index.mjs",
+    "serve:mock": "node server/index.mjs --mock",
+    "once": "node server/index.mjs --once",
+    "dev": "node tools/dev-server.mjs",
+    "test": "node --test tools/tests/limits.test.mjs tools/tests/format.test.mjs tools/tests/filetime.test.mjs tools/tests/sessions-merge.test.mjs tools/tests/http.test.mjs tools/tests/mock.test.mjs",
+    "shots": "node tools/screenshot.mjs",
+    "preview": "node tools/make-preview.mjs",
+    "validate": "icuewidget validate widget",
+    "package": "icuewidget package widget --output dist/claude-monitor.icuewidget",
+    "probe": "icuewidget package tools/probe-widget --output dist/claude-probe.icuewidget",
+    "build": "npm test && npm run validate && npm run package",
+    "sync": "node tools/sync-local.mjs",
+    "autostart:install": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/install-autostart.ps1",
+    "autostart:uninstall": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/uninstall-autostart.ps1"
+  },
+  "devDependencies": {
+    "icuewidget-cli": "^0.4.47",
+    "puppeteer-core": "^25.12.0"
+  }
+}

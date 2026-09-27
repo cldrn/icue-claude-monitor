@@ -1,0 +1,95 @@
+{
+  "_comment": "Scenarios for `npm run serve:mock`. Times are relative to the request (+2h14m / -3s); history 'synthetic:<shape>[:<resets>]' is generated. 'extends' deep-merges another scenario (arrays replace).",
+  "scenarios": {
+    "normal": {
+      "meta": {
+        "serverVersion": "0.1.0", "uptimeSeconds": 4242, "claudeConfigDir": "C:\\Users\\pauli\\.claude", "port": 41780,
+        "sources": {
+          "credentials": { "status": "ok", "lastError": null },
+          "account": { "status": "ok", "lastError": null },
+          "usage": { "status": "ok", "lastSuccessAt": "-40s", "lastAttemptAt": "-40s", "lastError": null, "lastErrorCode": null, "lastStatusCode": null, "consecutiveFailures": 0, "nextRetryAt": "+140s", "intervalSeconds": 180, "origin": "cache", "cacheMaxAgeSeconds": 300 },
+          "localSessions": { "status": "ok", "lastSuccessAt": "-3s", "lastAttemptAt": "-3s", "lastError": null, "consecutiveFailures": 0, "nextRetryAt": "+2s", "intervalSeconds": 5, "staleFiles": 1, "reusedPids": 0, "verifier": "procStart" },
+          "cloudSessions": { "status": "ok", "lastSuccessAt": "-20s", "lastAttemptAt": "-20s", "lastError": null, "consecutiveFailures": 0, "nextRetryAt": "+40s", "intervalSeconds": 60, "route": "code" }
+        }
+      },
+      "account": {
+        "email": "paulino.calderon@gmail.com", "displayName": "Paulino", "organizationName": "paulino.calderon@gmail.com's Organization",
+        "organizationType": "claude_max", "rateLimitTier": "default_claude_max_20x", "subscriptionType": "max", "seatTier": null,
+        "billingType": "stripe_subscription", "hasExtraUsageEnabled": false,
+        "token": { "present": true, "expired": false, "expiresAt": "+5h", "scopes": ["user:inference", "user:profile", "user:sessions:claude_code"] }
+      },
+      "usage": {
+        "fetchedAt": "-40s", "origin": "cache",
+        "limits": [
+          { "id": "session", "kind": "session", "label": "Session (5hr)", "percent": 15, "resetsAt": "+2h14m", "windowSeconds": 18000, "isActive": false, "severity": "normal", "scope": null, "group": "session", "history": "synthetic:sawtooth:4" },
+          { "id": "weekly_all", "kind": "weekly_all", "label": "Weekly (7 day)", "percent": 39, "resetsAt": "+4d2h", "windowSeconds": 604800, "isActive": false, "severity": "normal", "scope": null, "group": "weekly", "history": "synthetic:rising" },
+          { "id": "weekly_scoped:fable", "kind": "weekly_scoped", "label": "Fable limit", "percent": 63, "resetsAt": "+4d2h", "windowSeconds": 604800, "isActive": true, "severity": "normal", "scope": { "model": "Fable", "surface": null }, "group": "weekly", "history": "synthetic:rising" }
+        ],
+        "extra": { "isEnabled": false, "monthlyLimit": null, "usedCredits": null, "utilization": null, "currency": null, "spendLimitReached": false }
+      },
+      "sessions": {
+        "local": [
+          { "pid": 54832, "sessionId": "d37dbeab-de37-43a0-a8bc-8ee3a1ab3011", "name": "icue-claude-monitor-93", "title": "Build XENEON EDGE usage widget", "nameSource": "derived", "cwd": "c:\\Users\\pauli\\GitHub\\icue-claude-monitor", "project": "icue-claude-monitor", "entrypoint": "claude-vscode", "kind": "interactive", "version": "2.1.283", "status": "busy", "startedAt": "-1h12m", "updatedAt": "-8s", "statusUpdatedAt": "-8s", "verified": "procStart", "remote": false },
+          { "pid": 31732, "sessionId": "2d7cad4b-ef03-4ce8-a0a6-c12b4f4e5f83", "name": "threatpatrol-4f", "title": "Add Sigma rule exporter", "nameSource": "derived", "cwd": "c:\\Users\\pauli\\GitHub\\threatpatrol", "project": "threatpatrol", "entrypoint": "claude-vscode", "kind": "interactive", "version": "2.1.283", "status": "waiting", "startedAt": "-3h5m", "updatedAt": "-4m", "statusUpdatedAt": "-4m", "verified": "procStart", "remote": true },
+          { "pid": 25320, "sessionId": "ec8285d6-ac01-43fa-a028-7a46dfcfb2a7", "name": "calderonpale-com-b9", "title": null, "nameSource": "derived", "cwd": "c:\\Users\\pauli\\GitHub\\calderonpale.com", "project": "calderonpale.com", "entrypoint": "claude-vscode", "kind": "interactive", "version": "2.1.282", "status": "idle", "startedAt": "-5h40m", "updatedAt": "-2h1m", "statusUpdatedAt": "-2h1m", "verified": "procStart", "remote": false },
+          { "pid": 79556, "sessionId": "9a7b1224-b1c4-4e7f-87ce-df044f2e97c7", "name": "sendero", "title": "Refactor trail GPX importer for very long file names that overflow", "nameSource": "user", "cwd": "c:\\Users\\pauli\\GitHub\\sendero", "project": "sendero", "entrypoint": "cli", "kind": "interactive", "version": "2.1.283", "status": "idle", "startedAt": "-22m", "updatedAt": "-11m", "statusUpdatedAt": "-11m", "verified": "pid", "remote": false }
+        ],
+        "cloud": [
+          { "id": "cse_01", "title": "Fix flaky login e2e test", "status": "running", "rawStatus": "active", "workerStatus": "running", "archived": false, "createdAt": "-2h", "updatedAt": "-1m", "repo": "calderpwn/threatpatrol", "repoUrl": "https://github.com/calderpwn/threatpatrol", "branch": "main", "environment": "cloud", "pendingAction": null },
+          { "id": "cse_02", "title": "Write README for icue-windguru", "status": "idle", "rawStatus": "active", "workerStatus": "idle", "archived": false, "createdAt": "-1d3h", "updatedAt": "-3h", "repo": "calderpwn/icue-windguru", "repoUrl": "https://github.com/calderpwn/icue-windguru", "branch": "main", "environment": "cloud", "pendingAction": "permission" },
+          { "id": "cse_03", "title": "Investigate CVE-2026-1234 detection coverage", "status": "idle", "rawStatus": "active", "workerStatus": "idle", "archived": false, "createdAt": "-2d", "updatedAt": "-1d5h", "repo": "calderpwn/sendero", "repoUrl": "https://github.com/calderpwn/sendero", "branch": "dev", "environment": "cloud", "pendingAction": null }
+        ]
+      }
+    },
+
+    "critical": {
+      "extends": "normal",
+      "usage": {
+        "origin": "network",
+        "limits": [
+          { "id": "session", "kind": "session", "label": "Session (5hr)", "percent": 92, "resetsAt": "+38m", "windowSeconds": 18000, "isActive": true, "severity": "critical", "scope": null, "group": "session", "history": "synthetic:rising" },
+          { "id": "weekly_all", "kind": "weekly_all", "label": "Weekly (7 day)", "percent": 71, "resetsAt": "+1d6h", "windowSeconds": 604800, "isActive": false, "severity": "normal", "scope": null, "group": "weekly", "history": "synthetic:rising" },
+          { "id": "weekly_scoped:fable", "kind": "weekly_scoped", "label": "Fable limit", "percent": 97, "resetsAt": "+1d6h", "windowSeconds": 604800, "isActive": false, "severity": "critical", "scope": { "model": "Fable", "surface": null }, "group": "weekly", "history": "synthetic:rising" }
+        ],
+        "extra": { "isEnabled": true, "monthlyLimit": 100, "usedCredits": 42.5, "utilization": 42.5, "currency": "USD", "spendLimitReached": false }
+      }
+    },
+
+    "tokenExpired": {
+      "extends": "normal",
+      "meta": { "sources": { "credentials": { "status": "stale", "lastError": null }, "usage": { "status": "error", "lastSuccessAt": null, "lastAttemptAt": "-30s", "lastError": "token expired", "lastErrorCode": "token_expired", "consecutiveFailures": 3, "nextRetryAt": "+30s", "origin": null } } },
+      "account": { "token": { "present": true, "expired": true, "expiresAt": "-35m" } },
+      "usage": { "fetchedAt": "-52m", "origin": "cache" }
+    },
+
+    "rateLimited": {
+      "extends": "normal",
+      "meta": { "sources": { "usage": { "status": "stale", "lastSuccessAt": "-12m", "lastAttemptAt": "-1m", "lastError": "HTTP 429 rate limited", "lastErrorCode": "rate_limited", "lastStatusCode": 429, "consecutiveFailures": 2, "nextRetryAt": "+4m", "origin": "network" } } },
+      "usage": { "fetchedAt": "-12m", "origin": "network" }
+    },
+
+    "noCloud": {
+      "extends": "normal",
+      "meta": { "sources": { "cloudSessions": { "status": "error", "lastSuccessAt": null, "lastAttemptAt": "-10s", "lastError": "HTTP 404 route missing", "lastErrorCode": "route_missing", "lastStatusCode": 404, "consecutiveFailures": 4, "nextRetryAt": "+8m", "route": "legacy" } } },
+      "sessions": { "cloud": [] }
+    },
+
+    "empty": {
+      "extends": "normal",
+      "sessions": { "local": [], "cloud": [] }
+    },
+
+    "manyLimits": {
+      "extends": "normal",
+      "usage": {
+        "limits": [
+          { "id": "session", "kind": "session", "label": "Session (5hr)", "percent": 15, "resetsAt": "+2h14m", "windowSeconds": 18000, "isActive": false, "severity": "normal", "scope": null, "group": "session", "history": "synthetic:sawtooth:4" },
+          { "id": "weekly_all", "kind": "weekly_all", "label": "Weekly (7 day)", "percent": 39, "resetsAt": "+4d2h", "windowSeconds": 604800, "isActive": false, "severity": "normal", "scope": null, "group": "weekly", "history": "synthetic:rising" },
+          { "id": "weekly_scoped:fable", "kind": "weekly_scoped", "label": "Fable limit", "percent": 63, "resetsAt": "+4d2h", "windowSeconds": 604800, "isActive": true, "severity": "normal", "scope": { "model": "Fable", "surface": null }, "group": "weekly", "history": "synthetic:rising" },
+          { "id": "weekly_scoped:opus", "kind": "weekly_scoped", "label": "Opus limit", "percent": 22, "resetsAt": "+4d2h", "windowSeconds": 604800, "isActive": false, "severity": "normal", "scope": { "model": "Opus", "surface": null }, "group": "weekly", "history": "synthetic:flat" },
+          { "id": "weekly_scoped:sonnet", "kind": "weekly_scoped", "label": "Sonnet limit", "percent": 0, "resetsAt": null, "windowSeconds": 604800, "isActive": false, "severity": "normal", "scope": { "model": "Sonnet", "surface": null }, "group": "weekly", "history": [] }
+        ]
+      }
+    }
+  }
+}

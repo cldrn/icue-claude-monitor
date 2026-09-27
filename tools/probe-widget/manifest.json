@@ -1,0 +1,13 @@
+{
+  "author": "Paulino Calderon",
+  "id": "com.calderon.claudeprobe",
+  "name": "Claude Monitor Probe",
+  "description": "Diagnostic widget: prints the page origin, user agent and the result of a fetch to the companion server on 127.0.0.1.",
+  "version": "0.1.0",
+  "preview_icon": "resources/icon.svg",
+  "min_framework_version": "1.0.0",
+  "min_app_version": "5.47",
+  "os": [{ "platform": "windows" }],
+  "supported_devices": [{ "type": "dashboard_lcd", "features": ["sensor-screen"] }],
+  "interactive": true
+}
